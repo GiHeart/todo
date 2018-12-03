@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}新建todo{% endblock %}
+{% block body %}
+<div id="todo-add" style="margin-top: 70px">
+  <form action="{{ url_for('add') }}" method="post">
+    <textarea placeholder="请输入待办事项" rows=5 cols=50 name="u_content"></textarea>
+    <input type="submit" value="提交">
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}修改内容{% endblock %}
+{% block body %}
+<div id="div1" style="margin-top: 70px">
+<form method="post" action="{{ url_for('update') }}">
+  <textarea placeholder="{{ a }}" rows=5 cols=50 name="modify"></textarea>
+  <input type="submit" value="修改内容">
+</form>
+</div>
+{% endblock %}
