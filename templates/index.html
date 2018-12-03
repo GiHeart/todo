@@ -34,4 +34,25 @@
     </tr>
   </table>
 </div>
+<hr/>
+  <div id="test">
+  <table border="1px" style="border: solid lightgreen 1px;font-size: 24px;padding: 50px" cellpadding="10px" cellspacing="2px">
+    <tr>
+      <th>序号</th>
+      <th>内容</th>
+      <th>创建时间</th>
+      <th>状态</th>
+      <th>完成时间</th>
+    </tr>
+{% for d in data %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ d.content }}</td>
+        <td>{{ d.create_time }}</td>
+        <td>{{ d.status }}</td>
+        <td>{{ d.finish_time }}</td>
+      </tr>
+{% endfor %}
+  </table>
+  </div>
 {% endblock %}

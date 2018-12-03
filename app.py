@@ -1,6 +1,7 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, redirect
 from pymongo import MongoClient
 from datetime import datetime
+import time
 
 app = Flask(__name__)
 client = MongoClient()
@@ -21,11 +22,17 @@ collection = db['content']
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return redirect('testa')
+
+
+@app.route('/testa')
+def testa():
+    data = collection.find({})
+    return render_template('index.html', data=data)
 
 
 @app.route('/get')
-def hello_world1():
+def get():
     return 'Hello World!'
 
 
@@ -38,7 +45,8 @@ def add():
     x = collection.find_one({})
     print(x)
     if x:
-        return 'Hello World!'
+        time.sleep(2)
+        return redirect(url_for('index'))
 
 
 @app.route('/finish')
