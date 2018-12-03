@@ -43,14 +43,24 @@
       <th>创建时间</th>
       <th>状态</th>
       <th>完成时间</th>
+      <th>_id</th>
+      <th>删除</th>
+      <th>完成</th>
     </tr>
 {% for d in data %}
       <tr>
         <td>{{ loop.index }}</td>
         <td>{{ d.content }}</td>
         <td>{{ d.create_time }}</td>
-        <td>{{ d.status }}</td>
+        {% if d.status == 1 %}
+          <td>已完成</td>
+        {% else %}
+          <td>未完成</td>
+        {% endif %}
         <td>{{ d.finish_time }}</td>
+        <td>123</td>
+        <td><a href="{{ url_for('delete', id=d.content) }}">×</a></td>
+        <td><a href="{{ url_for('finish', id=d.content) }}">√</a></td>
       </tr>
 {% endfor %}
   </table>

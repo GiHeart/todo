@@ -9,17 +9,6 @@ db = client['todo']
 collection = db['content']
 
 
-# class Todo(object):
-#     @staticmethod
-#     def create_doc(self, content):
-#         return{
-#             'content': content,
-#             'create_time': datetime.now(),
-#             'status': 0,
-#             'finish_time': None
-#         }
-
-
 @app.route('/')
 def index():
     return redirect('testa')
@@ -41,7 +30,7 @@ def add():
     content = request.form
     u_content = content['u_content']
     print(u_content)
-    collection.insert_one({'content': u_content, 'create_time': datetime.now(), 'status': 0, 'finish_time': None})
+    collection.insert_one({'content': u_content, 'create_time': datetime.now(), 'status': 0, 'finish_time': None, 'time': time.time()})
     x = collection.find_one({})
     print(x)
     if x:
@@ -50,13 +39,23 @@ def add():
 
 
 @app.route('/finish')
-def hello_world3():
-    return 'Hello World!'
+def finish():
+    args = request.args
+    id = args['id']
+    print(id)
+    collection.update({'content': id}, {'$set': {'status': 1}})
+    return redirect(url_for('index'))
 
 
 @app.route('/delete')
-def hello_world4():
-    return 'Hello World!'
+def delete():
+    args = request.args
+    time = args['id']
+    # x = float(time)
+    # print(type(time))
+    print(type(time))
+    collection.delete_one({'content': time})
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
