@@ -1,6 +1,37 @@
 {% extends 'base.html' %}
 {% block title %}HELLO{% endblock %}
 {% block body %}
-<h1>你好</h1>
-<button class="btn">你好啊</button>
+<div id="todo-add">
+  <form action="{{ url_for('add') }}" method="post">
+    <textarea placeholder="请输入待办事项" rows=5 cols=50 name="u_content"></textarea>
+    <input type="submit" value="提交1">
+  </form>
+</div>
+<hr/>
+
+<div id="todo_list">
+  <table border="1px" style="border: solid lightgreen 1px;font-size: 24px;padding: 50px" cellpadding="10px" cellspacing="2px">
+    <tr>
+      <th>序号</th>
+      <th>状态</th>
+      <th>内容</th>
+      <th>删除</th>
+      <th>完成</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>已完成</td>
+      <td>早上记得打卡</td>
+      <td><a>×</a></td>
+      <td><a>√</a></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>未完成</td>
+      <td>记得双十二</td>
+      <td><a>×</a></td>
+      <td><a>√</a></td>
+    </tr>
+  </table>
+</div>
 {% endblock %}
