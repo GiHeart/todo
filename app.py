@@ -28,7 +28,7 @@ def testa():
         return render_template('aftersign.html', data=data, user=x)
     else:
         collection = db['content']
-        data = collection.find({})
+        data = collection.find({}).sort([('status', 1)])
         return render_template('index.html', data=data)
 
 
