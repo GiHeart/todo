@@ -7,14 +7,11 @@ app = Flask(__name__)
 client = MongoClient()
 db = client['todo']
 collection = db['content']
-# cookie = request.cookies
-# x = cookie['username']
-
 
 
 @app.route('/')
 def index():
-    return redirect('testa')
+    return render_template('sign_in.html')
 
 
 @app.route('/testa')
@@ -24,7 +21,7 @@ def testa():
         x = cookie['username']
         print(x)
         collection = db[f'{x}']
-        data = collection.find({})
+        data = collection.find({}).sort([('status', 1)])
         return render_template('aftersign.html', data=data, user=x)
     else:
         collection = db['content']
@@ -54,11 +51,11 @@ def add():
             user = cookie['username']
             collection = db[f'{user}']
             collection.insert_one({'content': u_content, 'create_time': datetime.now(), 'status': 0, 'finish_time': '', 'time': time.time()})
-            return redirect(url_for('index'))
+            return redirect(url_for('testa'))
         else:
             collection = db['content']
             collection.insert_one({'content': u_content, 'create_time': datetime.now(), 'status': 0, 'finish_time': '', 'time': time.time()})
-            return redirect(url_for('index'))
+            return redirect(url_for('testa'))
 
 
 @app.route('/finish')
@@ -71,14 +68,14 @@ def finish():
         id = args['id']
         print(id)
         collection.update({'content': id}, {'$set': {'status': 1, 'finish_time': datetime.now()}})
-        return redirect(url_for('index'))
+        return redirect(url_for('testa'))
     else:
         collection = db['content']
         args = request.args
         id = args['id']
         print(id)
         collection.update({'content': id}, {'$set': {'status': 1, 'finish_time': datetime.now()}})
-        return redirect(url_for('index'))
+        return redirect(url_for('testa'))
 
 
 @app.route('/delete')
@@ -90,11 +87,11 @@ def delete():
         user = cookie['username']
         collection = db[f'{user}']
         collection.delete_one({'content': time})
-        return redirect(url_for('index'))
+        return redirect(url_for('testa'))
     else:
         collection = db['content']
         collection.delete_one({'content': time})
-        return redirect(url_for('index'))
+        return redirect(url_for('testa'))
 
 
 @app.route('/update', methods=['GET', 'POST'])
@@ -114,12 +111,12 @@ def update():
             collection = db[f'{user}']
             collection.update({'content': x}, {'$set': {'content': con}})
             print(con)
-            return redirect(url_for('index'))
+            return redirect(url_for('testa'))
         else:
             collection = db['content']
             collection.update({'content': x}, {'$set': {'content': con}})
             print(con)
-            return redirect(url_for('index'))
+            return redirect(url_for('testa'))
 
 
 @app.route('/about')
@@ -170,11 +167,6 @@ def sign_up():
         collection = db['user']
         collection.insert_one({'user': username, 'password': password})
         return render_template('sign_in.html')
-
-
-@app.route('/aaa')
-def aaa():
-    return render_template('sign_in.html')
 
 
 if __name__ == '__main__':
