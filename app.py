@@ -39,10 +39,14 @@ def get():
 
 @app.route('/add', methods=['GET', 'POST'])
 def add():
+    cookie = request.cookies
     if request.method == 'GET':
-        return render_template('add.html')
+        if cookie:
+            user = cookie['username']
+            return render_template('afteradd.html', user=user)
+        else:
+            return render_template('add.html')
     else:
-        cookie = request.cookies
         content = request.form
         u_content = content['u_content']
         print(u_content)
@@ -126,7 +130,7 @@ def about():
 @app.route('/sign_in', methods=['POST', 'GET'])
 def sign_in():
     if request.method == 'GET':
-        return render_template('sign.html')
+        return render_template('sign_in.html')
     else:
         form = request.form
         user = form['user']
@@ -153,6 +157,24 @@ def delete_cookie():
     response.delete_cookie('username')
     response.delete_cookie('password')
     return response
+
+
+@app.route('/sign_up', methods=['GET', 'POST'])
+def sign_up():
+    if request.method == 'GET':
+        return render_template('sign_up.html')
+    else:
+        form = request.form
+        username = form['username']
+        password = form['password']
+        collection = db['user']
+        collection.insert_one({'user': username, 'password': password})
+        return render_template('sign_in.html')
+
+
+@app.route('/aaa')
+def aaa():
+    return render_template('sign_in.html')
 
 
 if __name__ == '__main__':

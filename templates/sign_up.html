@@ -1,11 +1,26 @@
 {% extends 'base.html' %}
-{% block title %}新建todo{% endblock %}
+{% block title %}注册{% endblock %}
 {% block xiala %}
-
 {% endblock %}
 {% block head %}
 {{ super() }}
   <style>
+.form1 input[type="text"]{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid green;
+    border-radius: 8px;
+}
+.form1 input[type="password"]{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid green;
+    border-radius: 8px;
+}
 .form1 input{
     width: 100%;
 }
@@ -33,17 +48,21 @@
 {% endblock %}
 {% block na %}
 <ul class="nav navbar-nav">
-  <li ><a href="{{ url_for('testa') }}">首页</a></li>
-  <li class="active"><a href="{{ url_for('add') }}">新建todo</a></li>
+  <li><a href="{{ url_for('testa') }}">首页</a></li>
+  <li><a href="{{ url_for('add') }}">新建todo</a></li>
   <li><a href="#">论坛</a></li>
   <li><a href="{{ url_for('about') }}">关于</a></li>
 </ul>
 {% endblock %}
 {% block body %}
 <div id="todo-add" style="margin-top: 70px" class="form1">
-  <form action="{{ url_for('add') }}" method="post">
-    <textarea placeholder="请输入待办事项" rows=10 cols=225 name="u_content"></textarea>
-    <input type="submit" value="添加">
+  <form action="{{ url_for('sign_up') }}" method="post">
+    <p>用户名：</p>
+    <input type="text" name="username" placeholder="请输入用户名">
+    <p>密码：</p>
+    <input type="password" name="password" placeholder="请输入密码">
+    <input type="submit" value="注册">
+    <input type="reset" value="重置">
   </form>
 </div>
 {% endblock %}

@@ -38,7 +38,7 @@ bottom: 0;
                 <span class="icon-bar"></span>
             </button>
             <!--logo-->
-            <a class="navbar-brand " href="http://www.baidu.com" target="_blank">
+            <a class="navbar-brand " href="{{ url_for('index') }}" target="_blank">
                 <img src="{{ url_for('static', filename='image/4523.png') }}" width="40px" height="40px">
             </a>
         </div>
@@ -57,8 +57,10 @@ bottom: 0;
                     <input type="text" placeholder="请填写用户名" name="user" class="form-control" required="required">
                     <input type="password" placeholder="填写密码" name="password" class="form-control">
                     <button type="submit" class="btn btn-success">登录</button>
+                    <button type="button" class="btn btn-success"><a href="{{ url_for('sign_up') }}">注册</a></button>
                 </form>
             {% endblock %}
+            {% block xiala %}
                 <ul class="nav navbar-nav navbar-right">
                     <li></li>
                     <li class="dropdown">
@@ -71,6 +73,7 @@ bottom: 0;
                         </ul>
                     </li>
                 </ul>
+              {% endblock %}
             </div>
         </div>
     </nav>
