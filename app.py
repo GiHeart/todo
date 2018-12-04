@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, make_response
 from pymongo import MongoClient
 from datetime import datetime
 import time
@@ -7,6 +7,9 @@ app = Flask(__name__)
 client = MongoClient()
 db = client['todo']
 collection = db['content']
+cookie = request.cookies
+x = cookie['username']
+
 
 
 @app.route('/')
@@ -16,6 +19,10 @@ def index():
 
 @app.route('/testa')
 def testa():
+    if x:
+        collection = db[f'{x}']
+        data = collection
+        return render_template('aftersign.html', data=data)
     data = collection.find({})
     return render_template('index.html', data=data)
 
@@ -37,7 +44,7 @@ def add():
         x = collection.find_one({})
         print(x)
         if x:
-            time.sleep(2)
+            time.sleep(0.1)
             return redirect(url_for('index'))
 
 
@@ -96,9 +103,23 @@ def sign_in():
         a = collection.find_one({'user': user})
         print(a)
         if user == a['user'] and password == a['password']:
-            return '登录成功'
+            collection=db['content']
+            data = collection.find({})
+            resonse = make_response(render_template('aftersign.html', user=user, data=data))
+            resonse.set_cookie('username', user)
+            resonse.set_cookie('password', password)
+            return resonse
         else:
             return '用户名或密码输错'
+
+
+@app.route('/aa')
+def aa():
+    cookie = request.cookies
+    print(cookie)
+    x = cookie['username']
+    print(x)
+    return render_template('aftersign.html')
 
 
 if __name__ == '__main__':

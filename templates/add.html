@@ -1,9 +1,45 @@
 {% extends 'base.html' %}
 {% block title %}新建todo{% endblock %}
+{% block head %}
+{{ super() }}
+  <style>
+.form1 input{
+    width: 100%;
+}
+.form1 input[type=textarea]{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid green;
+    border-radius: 8px;
+}
+.form1 input[type=textarea]:focus {
+    background-color: lightblue;
+}
+.form1 input[type=button], input[type=submit], input[type=reset] {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+  </style>
+{% endblock %}
+{% block na %}
+<ul class="nav navbar-nav">
+  <li ><a href="{{ url_for('testa') }}">首页</a></li>
+  <li class="active"><a href="{{ url_for('add') }}">新建todo</a></li>
+  <li><a href="#">论坛</a></li>
+  <li><a href="{{ url_for('about') }}">关于</a></li>
+</ul>
+{% endblock %}
 {% block body %}
-<div id="todo-add" style="margin-top: 70px">
+<div id="todo-add" style="margin-top: 70px" class="form1">
   <form action="{{ url_for('add') }}" method="post">
-    <textarea placeholder="请输入待办事项" rows=5 cols=50 name="u_content"></textarea>
+    <textarea placeholder="请输入待办事项" rows=10 cols=225 name="u_content"></textarea>
     <input type="submit" value="提交">
   </form>
 </div>
