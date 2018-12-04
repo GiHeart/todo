@@ -7,8 +7,8 @@ app = Flask(__name__)
 client = MongoClient()
 db = client['todo']
 collection = db['content']
-cookie = request.cookies
-x = cookie['username']
+# cookie = request.cookies
+# x = cookie['username']
 
 
 
@@ -19,12 +19,17 @@ def index():
 
 @app.route('/testa')
 def testa():
-    if x:
+    cookie = request.cookies
+    if cookie:
+        x = cookie['username']
+        print(x)
         collection = db[f'{x}']
-        data = collection
-        return render_template('aftersign.html', data=data)
-    data = collection.find({})
-    return render_template('index.html', data=data)
+        data = collection.find({})
+        return render_template('aftersign.html', data=data, user=x)
+    else:
+        collection = db['content']
+        data = collection.find({})
+        return render_template('index.html', data=data)
 
 
 @app.route('/get')
@@ -37,35 +42,55 @@ def add():
     if request.method == 'GET':
         return render_template('add.html')
     else:
+        cookie = request.cookies
         content = request.form
         u_content = content['u_content']
         print(u_content)
-        collection.insert_one({'content': u_content, 'create_time': datetime.now(), 'status': 0, 'finish_time': '', 'time': time.time()})
-        x = collection.find_one({})
-        print(x)
-        if x:
-            time.sleep(0.1)
+        if cookie:
+            user = cookie['username']
+            collection = db[f'{user}']
+            collection.insert_one({'content': u_content, 'create_time': datetime.now(), 'status': 0, 'finish_time': '', 'time': time.time()})
+            return redirect(url_for('index'))
+        else:
+            collection = db['content']
+            collection.insert_one({'content': u_content, 'create_time': datetime.now(), 'status': 0, 'finish_time': '', 'time': time.time()})
             return redirect(url_for('index'))
 
 
 @app.route('/finish')
 def finish():
-    args = request.args
-    id = args['id']
-    print(id)
-    collection.update({'content': id}, {'$set': {'status': 1, 'finish_time': datetime.now()}})
-    return redirect(url_for('index'))
+    cookie = request.cookies
+    if cookie:
+        user = cookie['username']
+        collection = db[f'{user}']
+        args = request.args
+        id = args['id']
+        print(id)
+        collection.update({'content': id}, {'$set': {'status': 1, 'finish_time': datetime.now()}})
+        return redirect(url_for('index'))
+    else:
+        collection = db['content']
+        args = request.args
+        id = args['id']
+        print(id)
+        collection.update({'content': id}, {'$set': {'status': 1, 'finish_time': datetime.now()}})
+        return redirect(url_for('index'))
 
 
 @app.route('/delete')
 def delete():
+    cookie = request.cookies
     args = request.args
     time = args['id']
-    # x = float(time)
-    # print(type(time))
-    print(type(time))
-    collection.delete_one({'content': time})
-    return redirect(url_for('index'))
+    if cookie:
+        user = cookie['username']
+        collection = db[f'{user}']
+        collection.delete_one({'content': time})
+        return redirect(url_for('index'))
+    else:
+        collection = db['content']
+        collection.delete_one({'content': time})
+        return redirect(url_for('index'))
 
 
 @app.route('/update', methods=['GET', 'POST'])
@@ -77,11 +102,20 @@ def update():
         print(x)
         return render_template('update.html', a=x)
     else:
+        cookie = request.cookies
         form = request.form
         con = form['modify']
-        collection.update({'content': x}, {'$set': {'content': con}})
-        print(con)
-        return redirect(url_for('index'))
+        if cookie:
+            user = cookie['username']
+            collection = db[f'{user}']
+            collection.update({'content': x}, {'$set': {'content': con}})
+            print(con)
+            return redirect(url_for('index'))
+        else:
+            collection = db['content']
+            collection.update({'content': x}, {'$set': {'content': con}})
+            print(con)
+            return redirect(url_for('index'))
 
 
 @app.route('/about')
@@ -101,11 +135,11 @@ def sign_in():
         print(password)
         collection = db['user']
         a = collection.find_one({'user': user})
-        print(a)
         if user == a['user'] and password == a['password']:
-            collection=db['content']
+            collection = db[f'{user}']
             data = collection.find({})
             resonse = make_response(render_template('aftersign.html', user=user, data=data))
+            print(user)
             resonse.set_cookie('username', user)
             resonse.set_cookie('password', password)
             return resonse
@@ -113,13 +147,12 @@ def sign_in():
             return '用户名或密码输错'
 
 
-@app.route('/aa')
-def aa():
-    cookie = request.cookies
-    print(cookie)
-    x = cookie['username']
-    print(x)
-    return render_template('aftersign.html')
+@app.route('/delete_cookie')
+def delete_cookie():
+    response = make_response(redirect(url_for('index')))
+    response.delete_cookie('username')
+    response.delete_cookie('password')
+    return response
 
 
 if __name__ == '__main__':
