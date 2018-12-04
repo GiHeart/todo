@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}用户主页{% endblock %}
+{% block sign %}
+<div class="navbar-nav" style="font-size: 18px;color: white;margin-left: 560px;margin-top:10px;">尊敬的用户：{{ user }}，你好</div>
+{% endblock %}
+{% block body %}
+
+<hr/>
+  <div id="test" align="center" style="margin-top: 50px;">
+  <h1 style="color: white;background-color: #1b6d85">TO DO</h1>
+  <table border="1px" style="border: solid red 1px;font-size: 24px;padding: 50px" cellpadding="10px" cellspacing="2px">
+    <tr>
+      <th>序号</th>
+      <th>内容</th>
+      <th>创建时间</th>
+      <th>状态</th>
+      <th>完成时间</th>
+      <th>修改</th>
+      <th>删除</th>
+      <th>完成</th>
+    </tr>
+{% for d in data %}
+  {% if d.status == 1 %}
+    <tr bgcolor="#90ee90" align="center">
+        <td>{{ loop.index }}</td>
+        <td>{{ d.content }}</td>
+        <td>{{ d.create_time }}</td>
+        {% if d.status == 1 %}
+          <td>已完成</td>
+        {% else %}
+          <td>未完成</td>
+        {% endif %}
+        <td>{{ d.finish_time }}</td>
+        <td><a href="{{ url_for('update', id=d.content) }}">修改内容</a></td>
+        <td><a href="{{ url_for('delete', id=d.content) }}">×</a></td>
+        <td><a href="{{ url_for('finish', id=d.content) }}">√</a></td>
+      </tr>
+  {% else %}
+      <tr align="center">
+        <td>{{ loop.index }}</td>
+        <td>{{ d.content }}</td>
+        <td>{{ d.create_time }}</td>
+        {% if d.status == 1 %}
+          <td>已完成</td>
+        {% else %}
+          <td>未完成</td>
+        {% endif %}
+        <td>{{ d.finish_time }}</td>
+        <td><a href="{{ url_for('update', id=d.content) }}">修改内容</a></td>
+        <td><a href="{{ url_for('delete', id=d.content) }}">×</a></td>
+        <td><a href="{{ url_for('finish', id=d.content) }}">√</a></td>
+      </tr>
+  {% endif %}
+{% endfor %}
+      <tr align="right" bgcolor="#f5deb3"><td colspan="8"><a href="{{ url_for('add') }}">新建todo</a></td></tr>
+  </table>
+  </div>
+{% endblock %}
