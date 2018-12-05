@@ -57,7 +57,7 @@ bottom: 0;
                     <input type="text" placeholder="请填写用户名" name="user" class="form-control" required="required">
                     <input type="password" placeholder="填写密码" name="password" class="form-control">
                     <button type="submit" class="btn btn-success">登录</button>
-                    <button type="button" class="btn btn-success"><a href="{{ url_for('sign_up') }}">注册</a></button>
+                    <a href="{{ url_for('sign_up') }}"><button type="button" class="btn btn-success">注册</button></a>
                 </form>
             {% endblock %}
             {% block xiala %}

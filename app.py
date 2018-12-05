@@ -151,7 +151,7 @@ def sign_in():
             resonse = make_response(render_template('aftersign.html', user=user, data=data))
             print(user)
             resonse.set_cookie('username', user)
-            resonse.set_cookie('password', password)
+            # resonse.set_cookie('password', password)
             return resonse
         else:
             return '用户名或密码输错'
@@ -162,7 +162,7 @@ def delete_cookie():
     """用户注销，删除cookie"""
     response = make_response(redirect(url_for('index')))
     response.delete_cookie('username')
-    response.delete_cookie('password')
+    # response.delete_cookie('password')
     return response
 
 
