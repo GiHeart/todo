@@ -25,5 +25,6 @@
 
 ## 效果
 ![](https://i.loli.net/2018/12/04/5c063f67e57b9.png) 
+<<<<<<< HEAD
 详情请看[我的博客](https://forali.club/2018/12/04/%E7%AC%AC%E4%B8%80%E4%B8%AAweb%E5%BA%94%E7%94%A8/)
 
