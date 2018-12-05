@@ -32,8 +32,8 @@
         {% endif %}
         <td>{{ d.finish_time }}</td>
         <td><a href="{{ url_for('update', id=d.content) }}">修改内容</a></td>
-        <td><a href="{{ url_for('delete', id=d.content) }}">×</a></td>
-        <td><a href="{{ url_for('finish', id=d.content) }}">√</a></td>
+        <td><a href="{{ url_for('delete', id=d.content) }}"><span class="glyphicon glyphicon-remove"></span></a></td>
+        <td><a href="{{ url_for('finish', id=d.content) }}"><span class="glyphicon glyphicon-ok"></span></a></td>
       </tr>
   {% else %}
       <tr align="center">
@@ -47,8 +47,8 @@
         {% endif %}
         <td>{{ d.finish_time }}</td>
         <td><a href="{{ url_for('update', id=d.content) }}">修改内容</a></td>
-        <td><a href="{{ url_for('delete', id=d.content) }}">×</a></td>
-        <td><a href="{{ url_for('finish', id=d.content) }}">√</a></td>
+        <td><a href="{{ url_for('delete', id=d.content) }}"><span class="glyphicon glyphicon-remove"></span></a></td>
+        <td><a href="{{ url_for('finish', id=d.content) }}"><span class="glyphicon glyphicon-ok"></span></a></td>
       </tr>
   {% endif %}
 {% endfor %}
