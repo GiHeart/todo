@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, request, redirect, make_respo
 from pymongo import MongoClient
 from datetime import datetime
 import time
+from bson import ObjectId
 
 app = Flask(__name__)
 # 连接数据库
@@ -178,6 +179,52 @@ def sign_up():
         collection = db['user']
         collection.insert_one({'user': username, 'password': password})
         return render_template('sign_in.html')
+
+
+@app.route('/comment', methods=['GET', 'post'])
+def comment():
+    cookie = request.cookies
+    if request.method == 'GET':
+        if cookie:
+            user = cookie['username']
+            collection = db['comment']
+            comment_data = collection.find({})
+            return render_template('aftercomment.html', comment_data=comment_data, user=user)
+        else:
+            collection = db['comment']
+            comment_data = collection.find({})
+            return render_template('comment.html', comment_data=comment_data)
+    else:
+        if cookie:
+            user = cookie['username']
+            form = request.form
+            text = form['text']
+            collection = db['comment']
+            collection.insert_one({'comment': text, 'comment_datetime': datetime.now(), 'user': user})
+            return redirect(url_for('comment'))
+        else:
+            form = request.form
+            text = form['text']
+            collection = db['comment']
+            collection.insert_one({'comment': text, 'comment_datetime': datetime.now(), 'user': '未登录用户'})
+            return redirect(url_for('comment'))
+
+
+@app.route('/management')
+def management():
+    collection = db['comment']
+    comment_data = collection.find({})
+    return render_template('Management_review.html', comment_data=comment_data)
+
+
+@app.route('/delete_comment')
+def delete_comment():
+    arg = request.args
+    id = arg['id']
+    _id = ObjectId(id)
+    collection = db['comment']
+    collection.delete_one({'_id': _id})
+    return redirect(url_for('management'))
 
 
 if __name__ == '__main__':

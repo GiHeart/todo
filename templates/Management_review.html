@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}网管{% endblock %}
+{% block head %}
+{{ super() }}
+  <style>
+  .comment1{
+    border: 1px #bce8f1 ;
+    margin-left: 380px;
+    width: 792px;
+  }
+
+  </style>
+{% endblock %}
+{% block sign %}
+<div class="navbar-nav" style="font-size: 18px;color: white;margin-left: 400px;margin-top:10px;">尊敬的网站管理员，你好</div>
+{% endblock %}
+{% block xiala %}
+{% endblock %}
+{% block na %}
+<ul class="nav navbar-nav">
+  <li><a href="{{ url_for('testa') }}">首页</a></li>
+  <li><a href="{{ url_for('add') }}">新建todo</a></li>
+  <li><a href="{{ url_for('comment') }}">论坛</a></li>
+  <li><a href="{{ url_for('about') }}">关于</a></li>
+</ul>
+{% endblock %}
+{% block body %}
+<div class="" style="margin-top: 80px">
+{% for co in comment_data %}
+  <div class="comment1">
+    <p style="font-size: 18px;color: #4cae4c">{{ co.user }}:&nbsp&nbsp&nbsp&nbsp<span style="color:darkblue">{{ co.comment}}</span><span style="margin-left: 400px;font-size: 14px">{{ co.comment_datetime.strftime('%Y-%m-%d %H:%M:%S') }}</span><a href="{{ url_for('delete_comment', id=co._id) }}"><span>删除评论</span></a></p>
+    <hr width="800px" style="color: #bce8f1">
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

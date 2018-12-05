@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}评论{% endblock %}
+{% block head %}
+{{ super() }}
+  <style>
+  .comment1{
+    border: 1px #bce8f1 ;
+    margin-left: 380px;
+    width: 792px;
+  }
+
+  </style>
+{% endblock %}
+{% block xiala %}
+{% endblock %}
+  {% block na %}
+<ul class="nav navbar-nav">
+  <li ><a href="{{ url_for('testa') }}">首页</a></li>
+  <li><a href="{{ url_for('add') }}">新建todo</a></li>
+  <li class="active"><a href="{{ url_for('comment') }}">论坛</a></li>
+  <li><a href="{{ url_for('about') }}">关于</a></li>
+</ul>
+{% endblock %}
+{% block body %}
+<div align="center" style="margin-top: 60px" >
+  <form action="{{ url_for('comment') }}" method="post">
+    <textarea placeholder="评论框" rows=10 cols=110 name="text"></textarea>
+    <input type="submit" value="评论">
+  </form>
+</div>
+<div class="" style="margin-top: 10px">
+{% for co in comment_data %}
+  <div class="comment1">
+    <p style="font-size: 18px;color: #4cae4c">{{ co.user }}:&nbsp&nbsp&nbsp&nbsp<span style="color:darkblue">{{ co.comment}}</span><span style="margin-left: 400px;font-size: 14px">{{ co.comment_datetime.strftime('%Y-%m-%d %H:%M:%S') }}</span></p>
+    <hr width="800px" style="color: #bce8f1">
+  </div>
+{% endfor %}
+</div>
+{% endblock %}
