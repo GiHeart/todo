@@ -13,8 +13,16 @@ collection = db['content']
 
 @app.route('/')
 def index():
-    """返回登录页面"""
-    return render_template('sign_in.html')
+    cookie = request.cookies
+    if cookie:
+        x = cookie['username']
+        print(x)
+        # 切换数据库集合，让不同用户操作
+        collection = db[f'{x}']
+        data = collection.find({}).sort([('status', 1), ('time', 1)])
+        return render_template('aftersign.html', data=data, user=x)
+    else:
+        return render_template('sign_in.html')
 
 
 @app.route('/testa')
