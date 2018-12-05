@@ -25,13 +25,14 @@ def testa():
         print(x)
         # 切换数据库集合，让不同用户操作
         collection = db[f'{x}']
-        data = collection.find({}).sort([('status', 1)])
+        data = collection.find({}).sort([('status', 1), ('time', 1)])
+
         # 返回登录后的页面
         return render_template('aftersign.html', data=data, user=x)
     else:
         # 如果没有cookie则返回index.html
         collection = db['content']
-        data = collection.find({}).sort([('status', 1)])
+        data = collection.find({}).sort([('status', 1), ('time', 1)])
         return render_template('index.html', data=data)
 
 

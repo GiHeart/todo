@@ -7,7 +7,7 @@
 <hr/>
   <div id="test" align="center" style="margin-top: 50px;">
   <h1 style="color: white;background-color: #1b6d85">TO DO</h1>
-  <table border="1px" style="border: solid red 1px;font-size: 18px;" class="table">
+  <table border="1px" class="table">
     <tr>
       <th>序号</th>
       <th>内容</th>
@@ -23,13 +23,13 @@
     <tr bgcolor="#90ee90" align="center">
         <td>{{ loop.index }}</td>
         <td>{{ d.content }}</td>
-        <td>{{ d.create_time }}</td>
+        <td>{{ d.create_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
         {% if d.status == 1 %}
-          <td>已完成</td>
+          <td><span class="glyphicon glyphicon-thumbs-up"></span></td>
         {% else %}
-          <td>未完成</td>
+          <td><span class="glyphicon glyphicon-thumbs-down"></span></td>
         {% endif %}
-        <td>{{ d.finish_time }}</td>
+        <td>{{ d.finish_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
         <td><a href="{{ url_for('update', id=d.content) }}">修改内容</a></td>
         <td><a href="{{ url_for('delete', id=d.content) }}"><span class="glyphicon glyphicon-remove"></span></a></td>
         <td><a href="{{ url_for('finish', id=d.content) }}"><span class="
@@ -39,11 +39,11 @@ glyphicon glyphicon-ok"></span></a></td>
       <tr align="center">
         <td>{{ loop.index }}</td>
         <td>{{ d.content }}</td>
-        <td>{{ d.create_time }}</td>
+        <td>{{ d.create_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
         {% if d.status == 1 %}
-          <td>已完成</td>
+          <td><span class="glyphicon glyphicon-thumbs-up"></span></td>
         {% else %}
-          <td>未完成</td>
+          <td><span class="glyphicon glyphicon-thumbs-down"></span></td>
         {% endif %}
         <td>{{ d.finish_time }}</td>
         <td><a href="{{ url_for('update', id=d.content) }}">修改内容</a></td>
