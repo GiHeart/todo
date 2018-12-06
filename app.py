@@ -191,16 +191,17 @@ def sign_up():
 
 @app.route('/comment', methods=['GET', 'post'])
 def comment():
+    """评论留言页面"""
     cookie = request.cookies
     if request.method == 'GET':
         if cookie:
             user = cookie['username']
             collection = db['comment']
-            comment_data = collection.find({})
+            comment_data = collection.find({}).sort([('comment_datetime', -1)])
             return render_template('aftercomment.html', comment_data=comment_data, user=user)
         else:
             collection = db['comment']
-            comment_data = collection.find({})
+            comment_data = collection.find({}).sort([('comment_datetime', -1)])
             return render_template('comment.html', comment_data=comment_data)
     else:
         if cookie:
@@ -218,17 +219,34 @@ def comment():
             return redirect(url_for('comment'))
 
 
-@app.route('/management')
+@app.route('/management', methods=['GET', 'POST'])
 def management():
-    collection = db['comment']
-    comment_data = collection.find({})
-    collection = db['user']
-    userdata = collection.find({})
-    return render_template('Management_review.html', comment_data=comment_data, userdata=userdata)
+    """后台管理"""
+    if request.method == 'GET':
+        return render_template('management_sign.html')
+    else:
+        form = request.form
+        user = form['user']
+        password = form['password']
+        collection = db['administrator']
+        print(user)
+        print(password)
+        a = collection.find_one({'username': user})
+        if a == None:
+            return '用户名输错'
+        elif user == a['username'] and password == a['password']:
+            collection = db['comment']
+            comment_data = collection.find({})
+            collection = db['user']
+            userdata = collection.find({})
+            return render_template('Management_review.html', comment_data=comment_data, userdata=userdata)
+        else:
+            return '密码和用户名不匹配'
 
 
 @app.route('/delete_comment')
 def delete_comment():
+    """删除评论"""
     arg = request.args
     id = arg['id']
     _id = ObjectId(id)
@@ -239,6 +257,7 @@ def delete_comment():
 
 @app.route('/management_user')
 def management_user():
+    """用户管理"""
     arg = request.args
     id = arg['id']
     _id = ObjectId(id)
@@ -249,6 +268,7 @@ def management_user():
 
 @app.route('/update_user', methods=['GET', 'POST'])
 def update_user():
+    """更新用户信息"""
     if request.method == 'GET':
         arg = request.args
         user = arg['username']
@@ -262,7 +282,11 @@ def update_user():
         new_password = form['new_password']
         collection = db['user']
         id = ObjectId(u_id)
-        collection.update_one({'_id': id}, {'$set': {'user': new_name, 'password': new_password}})
+        x1 = len(new_name)
+        if x1 == 0:
+            collection.update_one({'_id': id}, {'$set': {'password': new_password}})
+        else:
+            collection.update_one({'_id': id}, {'$set': {'user': new_name, 'password': new_password}})
         return redirect(url_for('management'))
 
 
