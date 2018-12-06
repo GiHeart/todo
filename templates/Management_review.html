@@ -2,14 +2,7 @@
 {% block title %}网管{% endblock %}
 {% block head %}
 {{ super() }}
-  <style>
-  .comment1{
-    border: 1px #bce8f1 ;
-    margin-left: 380px;
-    width: 792px;
-  }
 
-  </style>
 {% endblock %}
 {% block sign %}
 <div class="navbar-nav" style="font-size: 18px;color: white;margin-left: 400px;margin-top:10px;">尊敬的网站管理员，你好</div>
@@ -26,11 +19,42 @@
 {% endblock %}
 {% block body %}
 <div class="" style="margin-top: 80px">
-{% for co in comment_data %}
-  <div class="comment1">
-    <p style="font-size: 18px;color: #4cae4c">{{ co.user }}:&nbsp&nbsp&nbsp&nbsp<span style="color:darkblue">{{ co.comment}}</span><span style="margin-left: 400px;font-size: 14px">{{ co.comment_datetime.strftime('%Y-%m-%d %H:%M:%S') }}</span><a href="{{ url_for('delete_comment', id=co._id) }}"><span>删除评论</span></a></p>
-    <hr width="800px" style="color: #bce8f1">
-  </div>
-{% endfor %}
+<h2>评论管理</h2>
+<table class="table table-striped">
+    <tr>
+      <th>用户名</th>
+      <th>评论内容</th>
+      <th>评论时间</th>
+      <th></th>
+    </tr>
+  {% for co in comment_data %}
+    <tr>
+      <td>{{ co.user }}</td>
+      <td>{{ co.comment }}</td>
+      <td>{{ co.comment_datetime.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+      <td><a href="{{ url_for('delete_comment') }}">删除评论</a></td>
+    </tr>
+  {% endfor %}
+</table>
+<hr/>
+<h2>用户管理</h2>
+  <table class="table table-striped">
+    <tr>
+      <th>用户名</th>
+      <th>密码</th>
+      <th>注册时间</th>
+      <th>删除用户</th>
+      <th>修改用户</th>
+    </tr>
+    {% for user in userdata %}
+    <tr>
+      <td>{{ user.user }}</td>
+      <td>{{ user.password }}</td>
+      <td>{{ user.sign_time }}</td>
+      <td><a href="{{ url_for('management_user', id=user._id) }}">删除用户</a></td>
+      <td><a href="{{ url_for('update_user', username=user.user,ps=user.password,id=user._id) }}">修改用户</a></td>
+    </tr>
+    {% endfor %}
+  </table>
 </div>
 {% endblock %}

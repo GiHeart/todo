@@ -185,7 +185,7 @@ def sign_up():
         username = form['username']
         password = form['password']
         collection = db['user']
-        collection.insert_one({'user': username, 'password': password})
+        collection.insert_one({'user': username, 'password': password, 'sign_time':datetime.now()})
         return render_template('sign_in.html')
 
 
@@ -222,7 +222,9 @@ def comment():
 def management():
     collection = db['comment']
     comment_data = collection.find({})
-    return render_template('Management_review.html', comment_data=comment_data)
+    collection = db['user']
+    userdata = collection.find({})
+    return render_template('Management_review.html', comment_data=comment_data, userdata=userdata)
 
 
 @app.route('/delete_comment')
@@ -233,6 +235,35 @@ def delete_comment():
     collection = db['comment']
     collection.delete_one({'_id': _id})
     return redirect(url_for('management'))
+
+
+@app.route('/management_user')
+def management_user():
+    arg = request.args
+    id = arg['id']
+    _id = ObjectId(id)
+    collection = db['user']
+    collection.delete_one({'_id': id})
+    return redirect(url_for('management'))
+
+
+@app.route('/update_user', methods=['GET', 'POST'])
+def update_user():
+    if request.method == 'GET':
+        arg = request.args
+        user = arg['username']
+        password = arg['ps']
+        global u_id
+        u_id = arg['id']
+        return render_template('update_user.html', user=user, password=password)
+    else:
+        form = request.form
+        new_name = form['new_name']
+        new_password = form['new_password']
+        collection = db['user']
+        id = ObjectId(u_id)
+        collection.update_one({'_id': id}, {'$set': {'user': new_name, 'password': new_password}})
+        return redirect(url_for('management'))
 
 
 if __name__ == '__main__':

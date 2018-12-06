@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}网管{% endblock %}
+{% block head %}
+{{ super() }}
+
+{% endblock %}
+{% block sign %}
+<div class="navbar-nav" style="font-size: 18px;color: white;margin-left: 400px;margin-top:10px;">尊敬的网站管理员，你好</div>
+{% endblock %}
+{% block xiala %}
+{% endblock %}
+{% block na %}
+<ul class="nav navbar-nav">
+  <li><a href="{{ url_for('testa') }}">首页</a></li>
+  <li><a href="{{ url_for('add') }}">新建todo</a></li>
+  <li><a href="{{ url_for('comment') }}">论坛</a></li>
+  <li><a href="{{ url_for('about') }}">关于</a></li>
+</ul>
+{% endblock %}
+{% block body %}
+  <div style="margin-top: 70px;margin-bottom: 20px">
+<form action="{{ url_for('update_user') }}" method="post">
+  <label>用户名:{{ user }}</label><input type="text" name="new_name" placeholder="输入新用户名">
+  <label>密码：{{ password }}</label><input type="text" name="new_password" placeholder="输入新密码">
+  <input type="submit" value="确认修改">
+</form>
+  </div>
+{% endblock %}
